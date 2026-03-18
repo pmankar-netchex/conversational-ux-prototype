@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   Box, TextField, IconButton, Chip, Tooltip, Menu, MenuItem, ListItemIcon,
   ListItemText, Typography, keyframes,
@@ -45,16 +45,8 @@ export default function ChatInput({ onSend, showChips = false, placeholder, disa
     startListening, stopListening, resetTranscript,
   } = useVoiceInput();
 
-  // Merge transcript into typedText when user stops recording
-  useEffect(() => {
-    if (!isListening && transcript) {
-      setTypedText((prev) => prev + transcript);
-      resetTranscript();
-    }
-  }, [isListening, transcript, resetTranscript]);
-
   // Compute display value: typed text + live voice transcript
-  const displayValue = isListening ? typedText + transcript : typedText;
+  const displayValue = typedText + transcript;
 
   const handleSend = () => {
     // If recording, stop and merge first
@@ -77,6 +69,11 @@ export default function ChatInput({ onSend, showChips = false, placeholder, disa
 
   const handleMicClick = () => {
     if (isListening) {
+      // Merge transcript into typedText before stopping
+      if (transcript) {
+        setTypedText((prev) => prev + transcript);
+        resetTranscript();
+      }
       stopListening();
     } else {
       startListening();
