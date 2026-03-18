@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Box, TextField, IconButton, Chip, Tooltip, Menu, MenuItem, ListItemIcon,
-  ListItemText, Typography,
+  ListItemText, Typography, keyframes,
 } from '@mui/material';
 import {
   Send, AttachFile, Mic, GridView, EventAvailable, Payments,
   Schedule, PersonOutline,
 } from '@mui/icons-material';
+import { useVoiceInput } from '../../hooks/useVoiceInput';
 
 interface ChatInputProps {
   onSend: (message: string) => void;
@@ -30,15 +31,41 @@ const taskMenuItems = [
   { label: 'Update Personal Info', icon: <PersonOutline />, desc: 'Change address, bank details, or contact info' },
 ];
 
+const pulseAnimation = keyframes`
+  0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
+  70% { box-shadow: 0 0 0 8px rgba(239, 68, 68, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+`;
+
 export default function ChatInput({ onSend, showChips = false, placeholder, disabled = false, disabledMessage }: ChatInputProps) {
-  const [value, setValue] = useState('');
+  const [typedText, setTypedText] = useState('');
   const [taskAnchor, setTaskAnchor] = useState<null | HTMLElement>(null);
+  const {
+    isListening, transcript, isSupported, error,
+    startListening, stopListening, resetTranscript,
+  } = useVoiceInput();
+
+  // Merge transcript into typedText when user stops recording
+  useEffect(() => {
+    if (!isListening && transcript) {
+      setTypedText((prev) => prev + transcript);
+      resetTranscript();
+    }
+  }, [isListening, transcript, resetTranscript]);
+
+  // Compute display value: typed text + live voice transcript
+  const displayValue = isListening ? typedText + transcript : typedText;
 
   const handleSend = () => {
-    const trimmed = value.trim();
-    if (!trimmed) return;
-    onSend(trimmed);
-    setValue('');
+    // If recording, stop and merge first
+    if (isListening) {
+      stopListening();
+    }
+    const fullText = (typedText + transcript).trim();
+    if (!fullText) return;
+    onSend(fullText);
+    setTypedText('');
+    resetTranscript();
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -49,6 +76,14 @@ export default function ChatInput({ onSend, showChips = false, placeholder, disa
     if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) {
       e.preventDefault();
       handleSend();
+    }
+  };
+
+  const handleMicClick = () => {
+    if (isListening) {
+      stopListening();
+    } else {
+      startListening();
     }
   };
 
@@ -102,18 +137,68 @@ export default function ChatInput({ onSend, showChips = false, placeholder, disa
             <AttachFile sx={{ fontSize: 20 }} />
           </IconButton>
         </Tooltip>
-        <Tooltip title="Coming soon">
-          <IconButton size="small" sx={{ color: '#6B7280' }}>
-            <Mic sx={{ fontSize: 20 }} />
-          </IconButton>
+        <Tooltip
+          title={
+            !isSupported
+              ? 'Voice input is not supported in this browser'
+              : error
+                ? error
+                : isListening
+                  ? 'Stop voice input'
+                  : 'Start voice input'
+          }
+        >
+          <span>
+            <IconButton
+              size="small"
+              onClick={handleMicClick}
+              disabled={!isSupported || disabled}
+              aria-label={isListening ? 'Stop voice input' : 'Start voice input'}
+              sx={{
+                color: isListening ? '#EF4444' : '#6B7280',
+                animation: isListening ? `${pulseAnimation} 1.5s infinite` : 'none',
+                borderRadius: '50%',
+                '&:hover': {
+                  bgcolor: isListening ? '#FEE2E2' : undefined,
+                },
+              }}
+            >
+              <Mic sx={{ fontSize: 20 }} />
+            </IconButton>
+          </span>
         </Tooltip>
+        {isListening && (
+          <Typography
+            variant="caption"
+            aria-live="polite"
+            sx={{
+              color: '#EF4444',
+              fontSize: 12,
+              fontWeight: 500,
+              whiteSpace: 'nowrap',
+              animation: 'fadeIn 0.3s ease-in',
+              '@keyframes fadeIn': {
+                from: { opacity: 0 },
+                to: { opacity: 1 },
+              },
+            }}
+          >
+            Listening...
+          </Typography>
+        )}
 
         <TextField
           fullWidth
           size="small"
           placeholder={placeholder || 'Ask me anything or pick a task...'}
-          value={value}
-          onChange={(e) => setValue(e.target.value)}
+          value={displayValue}
+          onChange={(e) => {
+            if (!isListening) {
+              setTypedText(e.target.value);
+            }
+            // While listening, the field is effectively read-only for typing
+            // (voice transcript updates the display value via the hook)
+          }}
           onKeyDown={handleKeyDown}
           sx={{
             '& .MuiOutlinedInput-root': {
@@ -138,9 +223,9 @@ export default function ChatInput({ onSend, showChips = false, placeholder, disa
         <IconButton
           size="small"
           onClick={handleSend}
-          disabled={!value.trim()}
+          disabled={!displayValue.trim()}
           sx={{
-            color: value.trim() ? '#2563EB' : '#999',
+            color: displayValue.trim() ? '#2563EB' : '#999',
             '&:hover': { bgcolor: '#EFF6FF' },
           }}
         >
