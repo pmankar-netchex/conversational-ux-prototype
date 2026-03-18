@@ -73,10 +73,6 @@ export default function ChatInput({ onSend, showChips = false, placeholder, disa
       e.preventDefault();
       handleSend();
     }
-    if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) {
-      e.preventDefault();
-      handleSend();
-    }
   };
 
   const handleMicClick = () => {
