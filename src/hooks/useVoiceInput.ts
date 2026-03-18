@@ -28,7 +28,7 @@ export function useVoiceInput(): UseVoiceInputReturn {
     isListeningRef.current = false;
     setIsListening(false);
     if (recognitionRef.current) {
-      recognitionRef.current.abort();
+      recognitionRef.current.stop();
       recognitionRef.current = null;
     }
   }, []);

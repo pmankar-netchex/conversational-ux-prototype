@@ -195,9 +195,17 @@ export default function ChatInput({ onSend, showChips = false, placeholder, disa
           onChange={(e) => {
             if (!isListening) {
               setTypedText(e.target.value);
+            } else {
+              // While listening, allow typing by stripping the voice portion
+              const newVal = e.target.value;
+              const voiceSuffix = transcript;
+              if (newVal.endsWith(voiceSuffix)) {
+                setTypedText(newVal.slice(0, newVal.length - voiceSuffix.length));
+              } else {
+                // User edited within the voice portion — accept the full edit
+                setTypedText(newVal);
+              }
             }
-            // While listening, the field is effectively read-only for typing
-            // (voice transcript updates the display value via the hook)
           }}
           onKeyDown={handleKeyDown}
           sx={{
