@@ -7,6 +7,7 @@ import {
 import {
   Search, MoreVert, Description as DescIcon, PictureAsPdf,
 } from '@mui/icons-material';
+import { LOGO_URL } from '../../logoUrl';
 
 const mockDocuments = [
   {
@@ -76,7 +77,7 @@ export default function DocumentsPage() {
           borderBottom: '1px solid #E5E7EB',
         }}
       >
-        <img src="/assets/Logomark@2x.png" alt="" style={{ height: 28 }} />
+        <img src={LOGO_URL} alt="" style={{ height: 28 }} />
         <Typography variant="h4" sx={{ fontSize: 18, fontWeight: 400 }}>
           Document Center
         </Typography>

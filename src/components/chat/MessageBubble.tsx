@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Box, Typography, Avatar, IconButton, Tooltip } from '@mui/material';
 import { ChatBubbleOutline, AddReactionOutlined, AutoAwesome } from '@mui/icons-material';
 import type { Message } from '../../data/messages';
+import { LOGO_URL } from '../../logoUrl';
 import RichCard from './RichCard';
 
 interface MessageBubbleProps {
@@ -50,7 +51,7 @@ export default function MessageBubble({ message, isAskAi = false, onQuickReply, 
     return (
       <Box sx={{ display: 'flex', gap: 1, mb: 2, px: 2 }}>
         <Avatar
-          src="/assets/Logomark@2x.png"
+          src={LOGO_URL}
           sx={{ width: 36, height: 36, mt: 0.5 }}
         />
         <Box sx={{ maxWidth: '70%' }}>
@@ -108,7 +109,7 @@ export default function MessageBubble({ message, isAskAi = false, onQuickReply, 
         </Typography>
         <Box sx={{ display: 'flex', gap: 1, alignItems: 'flex-start' }}>
           <Avatar
-            src="/assets/Logomark@2x.png"
+            src={LOGO_URL}
             sx={{ width: 28, height: 28 }}
           />
           <Box sx={{ flex: 1 }}>

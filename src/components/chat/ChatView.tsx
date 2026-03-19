@@ -9,6 +9,7 @@ import { channelMessages } from '../../data/messages';
 import type { Message } from '../../data/messages';
 import { handleUserMessage, detectWhisperIntent } from '../../flows/flowEngine';
 import { channels } from '../../data/channels';
+import { LOGO_URL } from '../../logoUrl';
 
 interface ChatViewProps {
   channelId: string;
@@ -273,7 +274,7 @@ export default function ChatView({ channelId, isAskAi = false }: ChatViewProps) 
           <Box sx={{ display: 'flex', gap: 1, px: 2, mb: 2, alignItems: 'center' }}>
             <Box
               component="img"
-              src="/assets/Logomark@2x.png"
+              src={LOGO_URL}
               sx={{ width: 36, height: 36, borderRadius: '50%' }}
             />
             <Box sx={{ display: 'flex', gap: 0.5, bgcolor: '#F3F4F6', px: 2, py: 1, borderRadius: '4px 16px 16px 16px' }}>

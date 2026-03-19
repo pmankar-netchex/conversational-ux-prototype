@@ -11,6 +11,7 @@ import {
 import { employee } from '../../data/employee';
 import { useNavStore } from '../../store/navStore';
 import { useUiStore } from '../../store/uiStore';
+import { LOGO_URL } from '../../logoUrl';
 
 const payrollEmployees = [
   { name: 'Maria Rodriguez', role: 'Shift Lead', regularHrs: 80, otHrs: 4, grossPay: 1560.00, status: 'ready' as const },
@@ -51,7 +52,7 @@ export default function RunPayrollPage() {
           borderBottom: '1px solid #E5E7EB',
         }}
       >
-        <img src="/assets/Logomark@2x.png" alt="" style={{ height: 28 }} />
+        <img src={LOGO_URL} alt="" style={{ height: 28 }} />
         <Typography variant="h4" sx={{ fontSize: 18, fontWeight: 400 }}>
           Dashboard
         </Typography>

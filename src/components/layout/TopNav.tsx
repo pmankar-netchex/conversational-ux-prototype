@@ -11,6 +11,7 @@ import {
 } from '@mui/icons-material';
 import { useNavStore } from '../../store/navStore';
 import { useChatStore } from '../../store/chatStore';
+import { LOGO_URL } from '../../logoUrl';
 
 const navLinks = [
   { label: 'DASHBOARD', page: 'home' },
@@ -66,7 +67,7 @@ export default function TopNav() {
         {/* Left: Logo + Company */}
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, minWidth: isMobile ? 'auto' : 260 }}>
           <img
-            src="/assets/Logomark@2x.png"
+            src={LOGO_URL}
             alt="Netchex"
             style={{ height: isMobile ? 28 : 32 }}
           />

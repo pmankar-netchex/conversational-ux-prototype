@@ -4,6 +4,7 @@ import {
   TableContainer, TableHead, TableRow, TableSortLabel, Link, Tabs, Tab,
 } from '@mui/material';
 import { employee } from '../../data/employee';
+import { LOGO_URL } from '../../logoUrl';
 
 const mockTasks = [
   {
@@ -55,7 +56,7 @@ export default function TasksPage() {
           borderBottom: '1px solid #E5E7EB',
         }}
       >
-        <img src="/assets/Logomark@2x.png" alt="" style={{ height: 28 }} />
+        <img src={LOGO_URL} alt="" style={{ height: 28 }} />
         <Typography variant="h4" sx={{ fontSize: 18, fontWeight: 400 }}>
           Tasks
         </Typography>

@@ -7,6 +7,7 @@ import { getGreeting } from '../../utils/timeUtils';
 import { useChatStore } from '../../store/chatStore';
 import { useNavStore } from '../../store/navStore';
 import { handleUserMessage } from '../../flows/flowEngine';
+import { LOGO_URL } from '../../logoUrl';
 
 const exampleQueries = [
   'NEX, show me my last paycheck.',
@@ -65,7 +66,7 @@ export default function AskAIHome() {
         <Box sx={{ flex: 1, overflow: 'auto', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', py: isMobile ? 2 : 3 }}>
           {/* NEX Bot Avatar */}
           <Avatar
-            src="/assets/Logomark@2x.png"
+            src={LOGO_URL}
             sx={{
               width: 64,
               height: 64,

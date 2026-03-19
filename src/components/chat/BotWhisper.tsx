@@ -1,6 +1,7 @@
 import React from 'react';
 import { Box, Typography, Avatar, Button } from '@mui/material';
 import { useChatStore } from '../../store/chatStore';
+import { LOGO_URL } from '../../logoUrl';
 
 interface BotWhisperProps {
   message: string;
@@ -25,7 +26,7 @@ export default function BotWhisper({ message, onAccept, onDismiss }: BotWhisperP
       </Typography>
       <Box sx={{ display: 'flex', gap: 1, alignItems: 'flex-start' }}>
         <Avatar
-          src="/assets/Logomark@2x.png"
+          src={LOGO_URL}
           sx={{ width: 28, height: 28 }}
         />
         <Box>
