@@ -1,0 +1,4 @@
+# When GitHub Pages builds from a branch, Jekyll runs Liquid on Markdown.
+# Agent plans/specs often contain JSX `{{ ... }}` and break the build.
+exclude:
+  - docs/superpowers
